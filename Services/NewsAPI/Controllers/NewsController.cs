@@ -6,6 +6,7 @@ using App.Infrastructure;
 using App.Application.DTOs;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace NewsAPI.Controllers
 {
@@ -15,11 +16,13 @@ namespace NewsAPI.Controllers
     {
         private readonly IMapper _mapper;
         private readonly AppIdentityDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public NewsController(IMapper mapper, AppIdentityDbContext context)
+        public NewsController(IMapper mapper, AppIdentityDbContext context, UserManager<IdentityUser> userManager)
         {
             _mapper = mapper;
             _context = context;
+            _userManager = userManager;
         }
 
         [Authorize]
@@ -29,7 +32,10 @@ namespace NewsAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
 
+            IdentityUser user = await _userManager.GetUserAsync(HttpContext.User);
+
             var news = _mapper.Map<News>(newsDto);
+            news.Author = user;
 
             var result = await _context.News.AddAsync(news);
             _context.SaveChanges();
@@ -71,7 +77,7 @@ namespace NewsAPI.Controllers
                 return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != news.AuthorId.ToString())
+            if (userId != news.Author.Id.ToString())
                 return Forbid("Authors can only delete your own news");
 
             var result = _context.News.Remove(news);

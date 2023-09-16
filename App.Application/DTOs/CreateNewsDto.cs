@@ -1,7 +1,4 @@
-﻿using App.Domain;
-using Microsoft.AspNetCore.Identity;
-
-namespace App.Application.DTOs;
+﻿namespace App.Application.DTOs;
 
 public class CreateNewsDto
 {
