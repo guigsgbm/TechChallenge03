@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using AutoMapper;
-using App.Domain;
-using App.Infrastructure;
 using App.Application.DTOs;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using App.Services.Mapper;
+using App.Infrastructure.Repository;
 
 namespace NewsAPI.Controllers
 {
@@ -14,15 +11,15 @@ namespace NewsAPI.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
-        private readonly IMapper _mapper;
-        private readonly AppIdentityDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly INewsMapper _INewsMapper;
+        private readonly NewsRepository _newsRepository;
 
-        public NewsController(IMapper mapper, AppIdentityDbContext context, UserManager<IdentityUser> userManager)
+        public NewsController(NewsRepository newsRepository, UserManager<IdentityUser> userManager, INewsMapper INewsMapper)
         {
-            _mapper = mapper;
-            _context = context;
+            _newsRepository = newsRepository;
             _userManager = userManager;
+            _INewsMapper = INewsMapper;
         }
 
         [Authorize]
@@ -33,16 +30,13 @@ namespace NewsAPI.Controllers
                 return BadRequest();
 
             IdentityUser user = await _userManager.GetUserAsync(HttpContext.User);
+            var news = _INewsMapper.MapCreateNewsDtoToNews(newsDto, user);
+            _newsRepository.Save(news);
 
-            var news = _mapper.Map<News>(newsDto);
-            news.Author = user;
-
-            var result = await _context.News.AddAsync(news);
-            _context.SaveChanges();
-
-            return Ok(result.Entity);
+            return Ok(news);
         }
 
+        /*
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNews(int id)
         {
@@ -77,7 +71,7 @@ namespace NewsAPI.Controllers
                 return NotFound();
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId != news.Author.Id.ToString())
+            if (userId != news.AuthorId)
                 return Forbid("Authors can only delete your own news");
 
             var result = _context.News.Remove(news);
@@ -86,6 +80,7 @@ namespace NewsAPI.Controllers
             Console.WriteLine($"Delete successfully.");
             return NoContent();
         }
+        */
 
     }
 }
