@@ -12,12 +12,13 @@ public class NewsRepository : IRepository<News>
 
     public void Delete(int id)
     {
-        throw new NotImplementedException();
+        _context.News.Remove(_context.News.FirstOrDefault(x => x.Id == id));
+        _context.SaveChanges();
     }
 
     public News[] GetAll()
     {
-        throw new NotImplementedException();
+        return _context.News.ToArray();
     }
 
     public News GetById(int id)

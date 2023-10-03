@@ -36,24 +36,24 @@ namespace NewsAPI.Controllers
             return Ok(news);
         }
 
-        /*
+        
         [HttpGet("{id}")]
         public async Task<IActionResult> GetNews(int id)
         {
-            var news = _context.News.FirstOrDefault(x => x.Id == id);
+            var news = _newsRepository.GetById(id);
 
             if (news == null)
                 return NotFound("News not found");
 
-            var newsDto = _mapper.Map<GetNewsDto>(news);
+            var newsDto = _INewsMapper.MapNewsToGetNewsDto(news);
 
             return Ok(newsDto);
         }
-
+        
         [HttpGet]
         public async Task<IActionResult> GetAllNews()
         {
-            var news = _context.News.ToList();
+            var news = _newsRepository.GetAll();
 
             if (!news.Any())
                 return NotFound("News aren't found");
@@ -65,22 +65,20 @@ namespace NewsAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deletenews(int id)
         {
-            var news = _context.News.FirstOrDefault(x => x.Id == id);
+            var news = _newsRepository.GetById(id);
 
             if (news == null)
                 return NotFound();
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
             if (userId != news.AuthorId)
                 return Forbid("Authors can only delete your own news");
 
-            var result = _context.News.Remove(news);
-            await _context.SaveChangesAsync();
+            _newsRepository.Delete(id);
 
-            Console.WriteLine($"Delete successfully.");
+            Console.WriteLine($"Delete successfully notice {news.Id}.");
             return NoContent();
         }
-        */
 
     }
 }
