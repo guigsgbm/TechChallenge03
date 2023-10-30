@@ -11,15 +11,15 @@ namespace NewsAPI.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly INewsMapper _INewsMapper;
+        private readonly NewsMapper _newsMapper;
         private readonly NewsRepository _newsRepository;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public NewsController(NewsRepository newsRepository, UserManager<IdentityUser> userManager, INewsMapper INewsMapper)
+        public NewsController(NewsRepository newsRepository, NewsMapper newsMapper, UserManager<IdentityUser> userManager)
         {
             _newsRepository = newsRepository;
             _userManager = userManager;
-            _INewsMapper = INewsMapper;
+            _newsMapper = newsMapper;
         }
 
         [Authorize]
@@ -30,7 +30,7 @@ namespace NewsAPI.Controllers
                 return BadRequest();
 
             IdentityUser user = await _userManager.GetUserAsync(HttpContext.User);
-            var news = _INewsMapper.MapCreateNewsDtoToNews(newsDto, user);
+            var news = _newsMapper.MapCreateNewsDtoToNews(newsDto, user);
             _newsRepository.Save(news);
 
             return Ok(news);
@@ -45,7 +45,7 @@ namespace NewsAPI.Controllers
             if (news == null)
                 return NotFound("News not found");
 
-            var newsDto = _INewsMapper.MapNewsToGetNewsDto(news);
+            var newsDto = _newsMapper.MapNewsToGetNewsDto(news);
 
             return Ok(newsDto);
         }
@@ -61,7 +61,6 @@ namespace NewsAPI.Controllers
             return Ok(news);
         }
 
-        [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Deletenews(int id)
         {
@@ -70,14 +69,14 @@ namespace NewsAPI.Controllers
             if (news == null)
                 return NotFound();
 
-            var userId = _userManager.GetUserAsync(HttpContext.User).Result.Id;
-            if (userId != news.AuthorId)
-                return Forbid("Authors can only delete your own news");
+            if (_userManager.GetUserAsync(HttpContext.User).Result.Id == news.AuthorId || User.IsInRole("admin"))
+            {
+                _newsRepository.Delete(id);
+                Console.WriteLine($"Delete successfully notice {news.Id}.");
+                return NoContent();
+            }
 
-            _newsRepository.Delete(id);
-
-            Console.WriteLine($"Delete successfully notice {news.Id}.");
-            return NoContent();
+            return StatusCode(403, "Authors can only delete your own news");
         }
 
     }

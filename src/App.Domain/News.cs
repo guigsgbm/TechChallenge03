@@ -28,4 +28,9 @@ public class News
         AuthorName = author.UserName;
         AuthorId = author.Id;
     }
+
+    public News()
+    {
+        
+    }
 }

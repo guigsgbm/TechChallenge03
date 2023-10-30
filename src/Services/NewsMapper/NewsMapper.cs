@@ -1,15 +1,21 @@
 ﻿using App.Application.DTOs;
 using App.Domain;
-using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using AutoMapper;
 
 namespace App.Services.Mapper;
 
-public interface INewsMapper : IMapper
+public class NewsMapper
 {
+    private readonly IMapper _mapper;
+    public NewsMapper(IMapper mapper)
+    {
+        _mapper = mapper;
+    }
+
     public News MapCreateNewsDtoToNews(CreateNewsDto sourceEntity, IdentityUser user)
     {
-        News destinationEntity = Map<CreateNewsDto, News>(sourceEntity);
+        News destinationEntity = _mapper.Map<CreateNewsDto, News>(sourceEntity);
         destinationEntity.AuthorName = user.UserName;
         destinationEntity.AuthorId = user.Id;
         return destinationEntity;
@@ -17,7 +23,7 @@ public interface INewsMapper : IMapper
 
     public GetNewsDto MapNewsToGetNewsDto(News news)
     {
-        var destinationEntity = Map<News, GetNewsDto>(news);
+        var destinationEntity = _mapper.Map<News, GetNewsDto>(news);
         return destinationEntity;
     }
 }

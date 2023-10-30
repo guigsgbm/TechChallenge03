@@ -1,4 +1,7 @@
+using App.Application.Profiles;
 using App.Infrastructure;
+using App.Infrastructure.Repository;
+using App.Services.Mapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,7 +13,10 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<NewsRepository>();
+builder.Services.AddScoped<NewsMapper>();
+builder.Services.AddAutoMapper(typeof(NewsProfile).Assembly);
 
 var connection = builder.Configuration.GetConnectionString("AzureDB");
 builder.Services.AddDbContext<AppIdentityDbContext>(options =>
@@ -21,6 +27,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<AppIdentityDbContext>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    DbInitializer.SeedUsers(userManager, roleManager, builder.Configuration);
+}
 
 app.UseSwagger();
 app.UseSwaggerUI();
