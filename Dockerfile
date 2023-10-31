@@ -4,12 +4,12 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["src/Services/NewsAPI/NewsAPI.csproj", "NewsAPI/"]
-COPY ["src/App.Application/App.Application.csproj", "App.Application/"]
-COPY ["src/App.Domain/App.Domain.csproj", "App.Domain/"]
-COPY ["src/App.Infrastructure/App.Infrastructure.csproj", "App.Infrastructure/"]
-COPY ["src/Services/NewsMapper/Mapper.csproj", "NewsMapper/"]
-RUN dotnet restore "src/NewsAPI/NewsAPI.csproj"
+COPY ["Services/NewsAPI/NewsAPI.csproj", "NewsAPI/"]
+COPY ["App.Application/App.Application.csproj", "App.Application/"]
+COPY ["App.Domain/App.Domain.csproj", "App.Domain/"]
+COPY ["App.Infrastructure/App.Infrastructure.csproj", "App.Infrastructure/"]
+COPY ["Services/NewsMapper/Mapper.csproj", "NewsMapper/"]
+RUN dotnet restore "NewsAPI/NewsAPI.csproj"
 COPY . .
 WORKDIR "/src/Services/NewsAPI"
 RUN dotnet build "NewsAPI.csproj" -c Release -o /app/build
