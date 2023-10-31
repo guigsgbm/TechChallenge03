@@ -19,7 +19,7 @@ stages:
 - stage: Build_Image
   displayName: Build and push stage
   jobs:
-  - job: Build
+  - job: Docker
     displayName: Docker buildAndPush
     pool:
       vmImage: ubuntu-latest
@@ -46,7 +46,11 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    
+    - task: FileTransform@1
+      inputs:
+        folderPath: '$(System.DefaultWorkingDirectory)'
+        fileType: 'json'
+        targetFiles: $(appsettingsPath)
     - task: DotNetCoreCLI@2
       inputs:
         command: 'build'
