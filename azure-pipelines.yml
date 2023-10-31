@@ -13,7 +13,7 @@ variables:
  - name: imageName
    value: 'NewsAPI'
  - name: dockerfilePath
-   value: '**/**/NewsAPI/Dockerfile'
+   value: 'Dockerfile'
 
 stages:
 - stage: Build_Image
