@@ -39,3 +39,18 @@ stages:
         tags: |
           $(Build.BuildId)
           latest
+
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'SonarCloud -TechChallenge03'
+        organization: 'guigsgbm'
+        scannerMode: 'MSBuild'
+        projectKey: 'guigsgbm_TechChallenge03'
+
+    - task: SonarCloudAnalyze@1
+      inputs:
+        jdkversion: 'JAVA_HOME'
+
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
