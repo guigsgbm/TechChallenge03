@@ -16,9 +16,11 @@ public class NewsRepository : IRepository<News>
         _context.SaveChanges();
     }
 
-    public News[] GetAll()
+    public IEnumerable<News> GetAll(int skip, int take)
     {
-        return _context.News.ToArray();
+        return _context.News.ToList()
+            .Skip(skip)
+            .Take(take);
     }
 
     public News GetById(int id)

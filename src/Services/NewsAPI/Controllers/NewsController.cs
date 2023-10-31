@@ -51,9 +51,9 @@ namespace NewsAPI.Controllers
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetAllNews()
+        public async Task<IActionResult> GetAllNews([FromQuery] int skip = 0, [FromQuery] int take = 50)
         {
-            var news = _newsRepository.GetAll();
+            var news = _newsRepository.GetAll(skip, take);
 
             if (!news.Any())
                 return NotFound("News aren't found");
