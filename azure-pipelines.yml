@@ -39,7 +39,7 @@ stages:
         buildContext: '$(System.DefaultWorkingDirectory)'
         tags: |
           $(Build.BuildId)
-          latest'
+          latest
 
     - task: SonarCloudPrepare@1
       inputs:
