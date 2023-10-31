@@ -46,15 +46,6 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
-    - task: FileTransform@1
-      inputs:
-        folderPath: '$(System.DefaultWorkingDirectory)'
-        fileType: 'json'
-        targetFiles: $(appsettingsPath)
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: 'build'
-        arguments: '--configuration Release'
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'SonarCloud -TechChallenge03'
@@ -62,6 +53,24 @@ stages:
         scannerMode: 'MSBuild'
         projectKey: 'guigsgbm_TechChallenge03'
 
+    - task: FileTransform@1
+      inputs:
+        folderPath: '$(System.DefaultWorkingDirectory)'
+        fileType: 'json'
+        targetFiles: $(appsettingsPath)
+
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        projects: '**/*.csproj'
+        arguments: '--configuration Release'
+        
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'publish'
+        publishWebProjects: false
+        projects: '**/*.csproj'
+    
     - task: SonarCloudAnalyze@1
       inputs:
         jdkversion: 'JAVA_HOME'
