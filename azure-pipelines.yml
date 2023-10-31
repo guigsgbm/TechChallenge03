@@ -20,7 +20,7 @@ stages:
   displayName: Build and push stage
   jobs:
   - job: Build
-    displayName: Build
+    displayName: Docker buildAndPush
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -41,6 +41,16 @@ stages:
           $(Build.BuildId)
           latest
 
+  - job: Build
+    displayName: .Net Build + SonarCloud
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: 'build'
+        arguments: '--configuration Release'
     - task: SonarCloudPrepare@1
       inputs:
         SonarCloud: 'SonarCloud -TechChallenge03'
