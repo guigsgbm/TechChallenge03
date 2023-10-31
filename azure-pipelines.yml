@@ -9,11 +9,11 @@ resources:
 variables:
  - group: 'TechChallenge03'
  - name: appsettingsPath
-   value: '**/**/NewsAPI/appsettings.json'
+   value: '*/*/NewsAPI/appsettings.json'
  - name: imageName
    value: 'NewsAPI'
  - name: dockerfilePath
-   value: 'Dockerfile'
+   value: '*/*/NewsAPI/Dockerfile'
 
 stages:
 - stage: Build_Image
@@ -36,9 +36,10 @@ stages:
         repository: '$(imageName)'
         command: 'buildAndPush'
         Dockerfile: '$(dockerfilePath)'
+        buildContext: '$(System.DefaultWorkingDirectory)'
         tags: |
           $(Build.BuildId)
-          latest
+          latest'
 
     - task: SonarCloudPrepare@1
       inputs:
@@ -54,3 +55,5 @@ stages:
     - task: SonarCloudPublish@1
       inputs:
         pollingTimeoutSec: '300'
+
+    
