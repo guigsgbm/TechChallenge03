@@ -16,7 +16,7 @@ variables:
    value: '**/**/NewsAPI/Dockerfile'
 
 stages:
-- stage: Build Image
+- stage: Build_Image
   displayName: Build and push stage
   jobs:
   - job: Build
