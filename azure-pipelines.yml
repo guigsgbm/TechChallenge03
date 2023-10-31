@@ -1,0 +1,56 @@
+trigger:
+  branches:
+    include:
+      - main
+
+resources:
+- repo: self
+
+variables:
+ - group: 'TechChallenge03'
+ - name: appsettingsPath
+   value: '**/**/NewsAPI/appsettings.json'
+ - name: imageName
+   value: 'NewsAPI'
+ - name: dockerfilePath
+   value: '**/**/NewsAPI/Dockerfile'
+
+stages:
+- stage: Build_Image
+  displayName: Build and push stage
+  jobs:
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: FileTransform@1
+      inputs:
+        folderPath: '$(System.DefaultWorkingDirectory)'
+        fileType: 'json'
+        targetFiles: $(appsettingsPath)
+
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'acrtechchallenge03'
+        repository: '$(imageName)'
+        command: 'buildAndPush'
+        Dockerfile: '$(dockerfilePath)'
+        tags: |
+          $(Build.BuildId)
+          latest
+
+    - task: SonarCloudPrepare@1
+      inputs:
+        SonarCloud: 'SonarCloud -TechChallenge03'
+        organization: 'guigsgbm'
+        scannerMode: 'MSBuild'
+        projectKey: 'guigsgbm_TechChallenge03'
+
+    - task: SonarCloudAnalyze@1
+      inputs:
+        jdkversion: 'JAVA_HOME'
+
+    - task: SonarCloudPublish@1
+      inputs:
+        pollingTimeoutSec: '300'
