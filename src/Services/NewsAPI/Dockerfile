@@ -19,8 +19,8 @@ FROM build AS publish
 RUN dotnet publish "NewsAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
-RUN addgroup nonroot \
-    && useradd -G nonroot
+RUN groupadd --gid 10001 nonroot \
+    && useradd --gid 10001 --uid 10001 nonroot
 WORKDIR /app
 COPY --from=publish /app/publish .
 USER nonroot
