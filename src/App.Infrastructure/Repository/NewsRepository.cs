@@ -12,7 +12,7 @@ public class NewsRepository : IRepository<News>
 
     public void Delete(int id)
     {
-        _context.News.Remove(_context.News.FirstOrDefault(x => x.Id == id));
+        _context.News.Remove(_context.News.FirstOrDefault(x => x.Id == id)!);
         _context.SaveChanges();
     }
 
@@ -25,7 +25,7 @@ public class NewsRepository : IRepository<News>
 
     public News GetById(int id)
     {
-        return _context.News.FirstOrDefault(x => x.Id == id);
+        return _context.News.FirstOrDefault(x => x.Id == id)!;
     }
 
     public void Save(News news)

@@ -36,9 +36,9 @@ namespace NewsAPI.Controllers
             return Ok(news);
         }
 
-        
+
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetNews(int id)
+        public IActionResult GetNews(int id)
         {
             var news = _newsRepository.GetById(id);
 
@@ -49,9 +49,9 @@ namespace NewsAPI.Controllers
 
             return Ok(newsDto);
         }
-        
+
         [HttpGet]
-        public async Task<IActionResult> GetAllNews([FromQuery] int skip = 0, [FromQuery] int take = 50)
+        public IActionResult GetAllNews([FromQuery] int skip = 0, [FromQuery] int take = 50)
         {
             var news = _newsRepository.GetAll(skip, take);
 
@@ -62,7 +62,7 @@ namespace NewsAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Deletenews(int id)
+        public IActionResult Deletenews(int id)
         {
             var news = _newsRepository.GetById(id);
 
