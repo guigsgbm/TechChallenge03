@@ -1,7 +1,7 @@
 # Documentação do Projeto TechChallenge02
 
 ## Visão Geral
-Este projeto é uma aplicação .NET 6 que consiste em uma API, um WebApp e inclui várias etapas de configuração, implantação e automação no Azure DevOps. O guia a seguir fornece instruções detalhadas para configurar e implantar o projeto em um ambiente Azure.
+Este projeto é uma aplicação .NET 6 que consiste em uma API e inclui várias etapas de configuração, implantação e automação no Azure DevOps. O guia a seguir fornece instruções detalhadas para configurar e implantar o projeto em um ambiente Azure.
 
 ## Requisitos
 Antes de começar, certifique-se de ter o seguinte:

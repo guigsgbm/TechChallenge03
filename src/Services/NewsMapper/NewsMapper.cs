@@ -8,6 +8,7 @@ namespace App.Services.Mapper;
 public class NewsMapper
 {
     private readonly IMapper _mapper;
+
     public NewsMapper(IMapper mapper)
     {
         _mapper = mapper;
