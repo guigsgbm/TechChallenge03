@@ -19,9 +19,10 @@ FROM build AS publish
 RUN dotnet publish "NewsAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
-RUN addgroup -S nonroot \
-    && adduser -S nonroot -G nonroot
+RUN addgroup --shell SHELL nonroot \
+    && adduser --shell SHELL nonroot -G nonroot
 WORKDIR /app
 COPY --from=publish /app/publish .
 USER nonroot
+
 ENTRYPOINT ["dotnet", "NewsAPI.dll"]
