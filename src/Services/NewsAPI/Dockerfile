@@ -9,8 +9,9 @@ COPY ["src/App.Application/App.Application.csproj", "App.Application/"]
 COPY ["src/App.Domain/App.Domain.csproj", "App.Domain/"]
 COPY ["src/Services/NewsMapper/Mapper.csproj", "Services/NewsMapper/"]
 COPY ["src/App.Infrastructure/App.Infrastructure.csproj", "App.Infrastructure/"]
-COPY ["tests/TestsNewsAPI/TestsNewsAPI.csproj", "TestsNewsAPI/"]
 RUN dotnet restore "Services/NewsAPI/NewsAPI.csproj"
+WORKDIR tests
+COPY ["tests/TestsNewsAPI/TestsNewsAPI.csproj", "TestsNewsAPI/"]
 RUN dotnet restore "TestsNewsAPI/TestsNewsAPI.csproj"
 
 WORKDIR "/src/Services/NewsAPI"
