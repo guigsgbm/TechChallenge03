@@ -47,4 +47,16 @@ public class NewsTest
         // Act & Assert
         Assert.Throws<ArgumentException>(() => new News(title, description, author));
     }
+
+    [Fact]
+    public void Constructor_WithoutPublishDate_ThrowsArgumentException()
+    {
+        // Arrange
+        var author = new IdentityUser();
+        var title = "";
+        var description = "Sample Description";
+
+        // Act & Assert
+        Assert.Throws<ArgumentException>(() => new News(title, description, author));
+    }
 }

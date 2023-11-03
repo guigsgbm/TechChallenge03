@@ -29,7 +29,7 @@ public class News
         AuthorId = author.Id;
     }
 
-    public News()
+    internal News()
     {
         
     }
