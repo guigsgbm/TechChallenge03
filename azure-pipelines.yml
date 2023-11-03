@@ -34,9 +34,9 @@ stages:
       inputs:
         targetType: 'inline'
         script: |
-          docker build -f ./src/Services/NewsAPI/Dockerfile --target build -t test:$(build.buildid) . 
-          docker create -ti --name testcontainer test:$(build.buildid) 
-          docker cp testcontainer:/src/NewsAPI.UnitTests/TestResults/ 
+          docker build -f ./src/Services/NewsAPI/Dockerfile --target build -t newsapi:$(build.buildid) . 
+          docker create -ti --name testcontainer newsapi:$(build.buildid) 
+          docker cp testcontainer:/tests/TestsNewsAPI/TestResults/ $(Build.ArtifactStagingDirectory)/testresults 
           docker rm -fv testcontainer
 
     - task: Docker@2
