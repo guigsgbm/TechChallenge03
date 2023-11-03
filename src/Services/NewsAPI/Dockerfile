@@ -4,7 +4,7 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["/src/Services/NewsAPI/NewsAPI.csproj", "Services/NewsAPI/"]
+COPY ["src/Services/NewsAPI/NewsAPI.csproj", "Services/NewsAPI/"]
 COPY ["src/App.Application/App.Application.csproj", "App.Application/"]
 COPY ["src/App.Domain/App.Domain.csproj", "App.Domain/"]
 COPY ["src/Services/NewsMapper/Mapper.csproj", "Services/NewsMapper/"]
@@ -18,11 +18,11 @@ WORKDIR /tests
 COPY ["tests/", "."]
 COPY ["src/", "."]
 RUN dotnet restore "TestsNewsAPI/TestsNewsAPI.csproj"
-RUN dotnet build "TestsNewsAPI/TestsNewsAPI.csproj" -c Release -o /app
+RUN dotnet build "TestsNewsAPI/TestsNewsAPI.csproj" -c Release -o /app/tests
 RUN dotnet test "TestsNewsAPI/TestsNewsAPI.csproj" --logger "trx;LogFileName=TestsNewsAPI.trx" 
 
 FROM build AS publish
-RUN dotnet publish "NewsAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "src/Services/NewsAPI/NewsAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 RUN groupadd --gid 10001 nonroot \
