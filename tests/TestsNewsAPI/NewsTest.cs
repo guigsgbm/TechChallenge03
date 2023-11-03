@@ -1,5 +1,6 @@
 using App.Domain;
 using Microsoft.AspNetCore.Identity;
+using Xunit;
 
 namespace TestsNewsAPI;
 
