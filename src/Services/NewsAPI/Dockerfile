@@ -19,7 +19,7 @@ COPY ["tests/", "."]
 COPY ["src/", "."]
 RUN dotnet restore "TestsNewsAPI/TestsNewsAPI.csproj"
 RUN dotnet build "TestsNewsAPI/TestsNewsAPI.csproj" -c Release -o /app
-RUN dotnet test "TestsNewsAPI.csproj" --logger "trx;LogFileName=TestsNewsAPI.trx" 
+RUN dotnet test "TestsNewsAPI/TestsNewsAPI.csproj" --logger "trx;LogFileName=TestsNewsAPI.trx" 
 
 FROM build AS publish
 RUN dotnet publish "NewsAPI.csproj" -c Release -o /app/publish
