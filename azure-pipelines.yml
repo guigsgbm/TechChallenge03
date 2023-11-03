@@ -29,6 +29,15 @@ stages:
         folderPath: '$(System.DefaultWorkingDirectory)'
         fileType: 'json'
         targetFiles: $(appsettingsPath)
+    
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          docker build -f ./src/Services/NewsAPI/Dockerfile --target build -t test:$(build.buildid) . 
+          docker create -ti --name testcontainer test:$(build.buildid) 
+          docker cp testcontainer:/src/NewsAPI.UnitTests/TestResults/ 
+          docker rm -fv testcontainer
 
     - task: Docker@2
       inputs:
@@ -40,6 +49,12 @@ stages:
         tags: |
           $(Build.BuildId)
           latest
+
+    - task: PublishTestResults@2
+      inputs:
+        testResultsFormat: 'VSTest'
+        testResultsFiles: '*.trx'
+        searchFolder: '$(Build.ArtifactStagingDirectory)/testresults'
 
   - job: Build
     displayName: .Net Build + SonarCloud
