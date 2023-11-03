@@ -9,11 +9,15 @@ COPY ["src/App.Application/App.Application.csproj", "App.Application/"]
 COPY ["src/App.Domain/App.Domain.csproj", "App.Domain/"]
 COPY ["src/Services/NewsMapper/Mapper.csproj", "Services/NewsMapper/"]
 COPY ["src/App.Infrastructure/App.Infrastructure.csproj", "App.Infrastructure/"]
+COPY ["tests/TestsNewsAPI/TestsNewsAPI.csproj", "TestsNewsAPI/"]
 RUN dotnet restore "Services/NewsAPI/NewsAPI.csproj"
+RUN dotnet restore "TestsNewsAPI/TestsNewsAPI.csproj"
 
 WORKDIR "/src/Services/NewsAPI"
 COPY . .
 RUN dotnet build "NewsAPI.csproj" -c Release -o /app/build
+RUN dotnet build "TestsNewsAPI.csproj" -c Release -o /app
+RUN dotnet test "TestsNewsAPI.csproj" --logger "trx;LogFileName=TestsNewsAPI.trx" 
 
 FROM build AS publish
 RUN dotnet publish "NewsAPI.csproj" -c Release -o /app/publish

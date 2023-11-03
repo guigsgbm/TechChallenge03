@@ -5,10 +5,10 @@ namespace App.Domain;
 public class News
 {
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string AuthorId { get; set; }
-    public string AuthorName { get; set; }
+    public string? Title { get; set; }
+    public string? Description { get; set; }
+    public string? AuthorId { get; set; }
+    public string? AuthorName { get; set; }
     public DateTime PublishDate { get; set; } = DateTime.Now;
 
     public News(string title, string description, IdentityUser author)
