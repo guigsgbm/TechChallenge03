@@ -14,8 +14,11 @@ RUN dotnet restore "Services/NewsAPI/NewsAPI.csproj"
 RUN dotnet restore "TestsNewsAPI/TestsNewsAPI.csproj"
 
 WORKDIR "/src/Services/NewsAPI"
-COPY . .
+COPY ["src", "."]
 RUN dotnet build "NewsAPI.csproj" -c Release -o /app/build
+
+WORKDIR "/tests/TestsNewsAPI"
+COPY ["tests", "."]
 RUN dotnet build "TestsNewsAPI.csproj" -c Release -o /app
 RUN dotnet test "TestsNewsAPI.csproj" --logger "trx;LogFileName=TestsNewsAPI.trx" 
 
