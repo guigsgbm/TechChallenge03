@@ -22,7 +22,7 @@ RUN dotnet build "TestsNewsAPI/TestsNewsAPI.csproj" -c Release -o /app/tests
 RUN dotnet test "TestsNewsAPI/TestsNewsAPI.csproj" --logger "trx;LogFileName=TestsNewsAPI.trx" 
 
 FROM build AS publish
-RUN dotnet publish "src/Services/NewsAPI/NewsAPI.csproj" -c Release -o /app/publish
+RUN dotnet publish "Services/NewsAPI/NewsAPI.csproj" -c Release -o /app/publish
 
 FROM base AS final
 RUN groupadd --gid 10001 nonroot \
