@@ -83,8 +83,8 @@ stages:
       inputs:
         pollingTimeoutSec: '300'
 
-  - job: Build
-    displayName: .Net Build + SonarCloud
+  - job: Deploy
+    displayName: Deploy to App Service
     pool:
       vmImage: ubuntu-latest
     steps:
