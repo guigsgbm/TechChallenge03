@@ -11,7 +11,7 @@ using System.Net;
 
 namespace TestsNewsAPI;
 
-public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
+public class NewsTest : WebApplicationFactory<Program>
 {
     private readonly WebApplicationFactory<Program> _factory;
     private readonly Microsoft.Extensions.Configuration.IConfiguration? _config;
