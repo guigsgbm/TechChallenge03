@@ -14,16 +14,14 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
     private DbContextOptions<AppIdentityDbContext> _options;
-    private Microsoft.Extensions.Configuration.IConfiguration _configuration;
 
-    public NewsTest(WebApplicationFactory<Program> factory, Microsoft.Extensions.Configuration.IConfiguration configuration)
+    public NewsTest(WebApplicationFactory<Program> factory)
     {
         _options = new DbContextOptionsBuilder<AppIdentityDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _factory = factory;
-        _configuration = configuration;
     }
 
     [Fact]
@@ -105,7 +103,12 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
         {
             builder.ConfigureServices(services =>
             {
-                var connection = _configuration.GetConnectionString("AzureDB");
+                Microsoft.Extensions.Configuration.IConfiguration configuration = new ConfigurationBuilder()
+                .SetBasePath("src/Services/NewsAPI")
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+                var connection = configuration.GetConnectionString("AzureDB");
                 services.AddDbContext<AppIdentityDbContext>(options =>
                 options.UseSqlServer(connection));
             });
