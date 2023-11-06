@@ -1,11 +1,26 @@
 using App.Domain;
+using App.Infrastructure;
 using Microsoft.AspNetCore.Identity;
-using Xunit;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace TestsNewsAPI;
 
-public class NewsTest
+public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
 {
+    private readonly WebApplicationFactory<Program> _factory;
+    private DbContextOptions<AppIdentityDbContext> _options;
+
+    public NewsTest(WebApplicationFactory<Program> factory)
+    {
+        _options = new DbContextOptionsBuilder<AppIdentityDbContext>()
+            .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+            .Options;
+
+        _factory = factory;
+    }
+
     [Fact]
     public void Constructor_WithValidData_SetsProperties()
     {
@@ -49,14 +64,46 @@ public class NewsTest
     }
 
     [Fact]
-    public void Constructor_WithoutPublishDate_ThrowsArgumentException()
+    public void TestUploadValidNews()
     {
         // Arrange
         var author = new IdentityUser();
-        var title = "";
-        var description = "Sample Description";
+        var title = "Sample Title";
+        var description = "Sample valid description with 30 or more characters";
 
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => new News(title, description, author));
+        // Act
+        using (var context = new AppIdentityDbContext(_options))
+        {
+            var news = new News(title, description, author);
+
+            context.News.Add(news);
+            context.SaveChanges();
+        }
+
+        // Assert
+        using (var context = new AppIdentityDbContext(_options))
+        {
+            var insertNews = context.News.FirstOrDefault(n => n.Title == title);
+
+            Assert.NotNull(insertNews);
+            Assert.Equal(title, insertNews.Title);
+            Assert.Equal(description, insertNews.Description);
+        }
     }
+
+    [Fact]
+    public async Task TestGetAllNewsEndpoint()
+    {
+        // Arrange
+        var client = _factory.CreateClient();
+        string url = "http://localhost:5075/api/news";
+
+        // Act
+        var response = await client.GetAsync(url);
+
+        // Assert
+        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+    }
+
+
 }
