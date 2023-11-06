@@ -91,7 +91,7 @@ stages:
       - task: AzureRmWebAppDeployment@4
         inputs:
           ConnectionType: 'AzureRM'
-          azureSubscription: 'Azure for Students(c0b47b0c-425a-4257-bf4a-1b1051a06839)'
+          azureSubscription: 'TechChallenge-03'
           appType: 'webAppContainer'
           WebAppName: 'WebAppTechChallenge03'
           DockerNamespace: 'acrtechchallenge03.azurecr.io'
