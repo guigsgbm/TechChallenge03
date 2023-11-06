@@ -14,7 +14,7 @@ namespace TestsNewsAPI;
 public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
-    private readonly IConfigurationRoot _config;
+    private readonly Microsoft.Extensions.Configuration.IConfiguration? _config;
     private DbContextOptions<AppIdentityDbContext> _options;
 
     public NewsTest(WebApplicationFactory<Program> factory)
@@ -24,7 +24,7 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
             .Options;
 
         _factory = factory;
-        _config = (IConfigurationRoot?)factory.Services.GetService<Microsoft.Extensions.Configuration.IConfiguration>();
+        _config = factory.Services.GetService<Microsoft.Extensions.Configuration.IConfiguration>();
     }
 
     [Fact]
