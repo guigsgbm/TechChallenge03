@@ -83,4 +83,17 @@ stages:
       inputs:
         pollingTimeoutSec: '300'
 
-    
+  - job: Deploy
+    displayName: Deploy to App Service
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: AzureRmWebAppDeployment@4
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Azure for Students(c0b47b0c-425a-4257-bf4a-1b1051a06839)'
+          appType: 'webAppContainer'
+          WebAppName: 'webApp-TechChallenge03'
+          DockerNamespace: 'acrtechchallenge03.azurecr.io'
+          DockerRepository: 'newsapi'
+          DockerImageTag: 'latest'
