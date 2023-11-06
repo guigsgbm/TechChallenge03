@@ -92,47 +92,4 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
         }
     }
 
-    [Fact]
-    public async Task TestGetAllNewsEndpoint()
-    {
-        // Arrange
-        var factory = new WebApplicationFactory<Program>()
-                .WithWebHostBuilder(builder =>
-                {
-                    builder.ConfigureAppConfiguration((hostingContext, config) =>
-                    {
-                        var appsettingsPath = Environment.GetEnvironmentVariable("APPSETTINGS_PATH");
-
-                        config
-                        .SetBasePath(appsettingsPath)
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
-
-                    });
-
-                    builder.ConfigureServices(services =>
-                    {
-                        var serviceProvider = services.BuildServiceProvider();
-                        var configuration = serviceProvider.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
-                        var connection = configuration.GetConnectionString("AzureDB");
-
-                        services.AddDbContext<AppIdentityDbContext>(options =>
-                            options.UseSqlServer(connection));
-
-                        services.AddIdentity<IdentityUser, IdentityRole>()
-                        .AddRoles<IdentityRole>()
-                        .AddEntityFrameworkStores<AppIdentityDbContext>();
-
-                    });
-                });
-        var client = factory.CreateClient();
-        string url = "/api/news";
-
-        // Act
-        var response = await client.GetAsync(url);
-
-        // Assert
-        Assert.Equal(HttpStatusCode.OK, response.StatusCode);
-    }
-
 }

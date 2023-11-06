@@ -15,7 +15,6 @@ COPY ["src/", "."]
 RUN dotnet build "NewsAPI.csproj" -c Release -o /app/build
 
 WORKDIR /tests
-ENV APPSETTINGS_PATH=/src/Services/NewsAPI/
 COPY ["tests/", "."]
 COPY ["src/", "."]
 RUN dotnet restore "TestsNewsAPI/TestsNewsAPI.csproj"
