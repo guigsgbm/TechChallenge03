@@ -99,6 +99,15 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
         var factory = new WebApplicationFactory<Program>()
                 .WithWebHostBuilder(builder =>
                 {
+                    builder.ConfigureAppConfiguration((hostingContext, config) =>
+                    {
+                        var projectPath = Path.Combine("..", "src/Services/NewsAPI");
+
+                        config
+                            .SetBasePath(projectPath)
+                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                    });
+
                     builder.ConfigureServices(services =>
                     {
                         var serviceProvider = services.BuildServiceProvider();
