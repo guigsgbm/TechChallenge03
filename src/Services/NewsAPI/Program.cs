@@ -54,5 +54,5 @@ app.Use((context, next) =>
 app.MapControllers();
 
 app.Run();
-    
+
 public partial class Program { }
