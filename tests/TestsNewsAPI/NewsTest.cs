@@ -1,8 +1,11 @@
 using App.Domain;
 using App.Infrastructure;
+using Castle.Core.Configuration;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 
 namespace TestsNewsAPI;
@@ -11,14 +14,16 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
     private DbContextOptions<AppIdentityDbContext> _options;
+    private Microsoft.Extensions.Configuration.IConfiguration _configuration;
 
-    public NewsTest(WebApplicationFactory<Program> factory)
+    public NewsTest(WebApplicationFactory<Program> factory, Microsoft.Extensions.Configuration.IConfiguration configuration)
     {
         _options = new DbContextOptionsBuilder<AppIdentityDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
 
         _factory = factory;
+        _configuration = configuration;
     }
 
     [Fact]
@@ -95,6 +100,17 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
     public async Task TestGetAllNewsEndpoint()
     {
         // Arrange
+        var application = new WebApplicationFactory<Program>()
+        .WithWebHostBuilder(builder =>
+        {
+            builder.ConfigureServices(services =>
+            {
+                var connection = _configuration.GetConnectionString("AzureDB");
+                services.AddDbContext<AppIdentityDbContext>(options =>
+                options.UseSqlServer(connection));
+            });
+        });
+
         var client = _factory.CreateClient();
         string url = "http://localhost:5075/api/news";
 
@@ -104,6 +120,5 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
         // Assert
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
     }
-
 
 }
