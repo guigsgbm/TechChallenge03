@@ -1,39 +1,39 @@
-# DocumentaÁ„o do Projeto TechChallenge02
+# Documenta√ß√£o do Projeto TechChallenge03
 
-## Vis„o Geral
-Este projeto È uma aplicaÁ„o .NET 6 que consiste em uma API e inclui v·rias etapas de configuraÁ„o, implantaÁ„o e automaÁ„o no Azure DevOps. O guia a seguir fornece instruÁıes detalhadas para configurar e implantar o projeto em um ambiente Azure.
+## Vis√£o Geral
+Este projeto √© uma aplica√ß√£o .NET 6 que consiste em uma API e inclui v√°rias etapas de configura√ß√£o, implanta√ß√£o e automa√ß√£o no Azure DevOps. O guia a seguir fornece instru√ß√µes detalhadas para configurar e implantar o projeto em um ambiente Azure.
 
 ## Requisitos
-Antes de comeÁar, certifique-se de ter o seguinte:
-- Conta no Azure com as permissıes necess·rias.
+Antes de come√ßar, certifique-se de ter o seguinte:
+- Conta no Azure com as permiss√µes necess√°rias.
 - Conta no Azure DevOps com acesso ao projeto desejado.
 - .NET 6 SDK instalado localmente.
 - Git instalado localmente.
 
-## Passos para ConfiguraÁ„o e ImplantaÁ„o
+## Passos para Configura√ß√£o e Implanta√ß√£o
 
 ### 1. Deploy dos recursos no Azure.
-- Sql Server + Database.
+- Sql Server + Database (Aplicar Migrations, ex: dotnet ef database update).
 - ACR (Azure Container Registry).
 - App Service (Habilite o Application Insights).
 
-### 2. Clone o RepositÛrio
-- Abra um terminal e execute o seguinte comando para clonar o repositÛrio do GitHub:
+### 2. Clone o Reposit√≥rio
+- Abra um terminal e execute o seguinte comando para clonar o reposit√≥rio do GitHub:
 
   ```bash
   git clone https://github.com/guigsgbm/TechChallenge03.git
 
-- Suba o repositÛrio em algum gerenciador de cÛdigo de sua preferÍncia (Github, Azure DevOps etc..)
+- Suba o reposit√≥rio em algum gerenciador de c√≥digo de sua prefer√™ncia (Github, Azure DevOps etc..)
 
 ### 3. Configure as Pipelines no Azure DevOps
 
-- No Azure DevOps, navegue atÈ o seu projeto.
+- No Azure DevOps, navegue at√© o seu projeto.
 
-- Ajuste os arquivos YAML conforme necess·rio para configurar a compilaÁ„o, teste e implantaÁ„o de acordo com suas preferÍncias.
+- Ajuste os arquivos YAML conforme necess√°rio para configurar a compila√ß√£o, teste e implanta√ß√£o de acordo com suas prefer√™ncias.
 
 ### 4. Service Connections Azure DevOps
 
-- Realize a configuraÁ„o de todas as conexıes utilizadas pelo Azure DevOps, isso pode incluir:
+- Realize a configura√ß√£o de todas as conex√µes utilizadas pelo Azure DevOps, isso pode incluir:
 
 - ACR
 
@@ -41,20 +41,20 @@ Antes de comeÁar, certifique-se de ter o seguinte:
 
 - Sonar
 
-- RepositÛrio
+- Reposit√≥rio
 
-### 5. Configurar Vari·veis no Azure DevOps
+### 5. Configurar Vari√°veis no Azure DevOps
 
-- Dentro das pipelines YAML, verifique se as vari·veis necess·rias (se houver) est„o configuradas corretamente. FaÁa os ajustes necess·rios no arquivo YAML para incluir as vari·veis que seu projeto requer.
+- Dentro das pipelines YAML, verifique se as vari√°veis necess√°rias (se houver) est√£o configuradas corretamente. Fa√ßa os ajustes necess√°rios no arquivo YAML para incluir as vari√°veis que seu projeto requer.
 
-- Certifique-se de que todas as vari·veis de ambiente, segredos ou quaisquer outras configuraÁıes especÌficas do seu projeto estejam definidas nas pipelines do Azure DevOps de acordo com suas necessidades.
+- Certifique-se de que todas as vari√°veis de ambiente, segredos ou quaisquer outras configura√ß√µes espec√≠ficas do seu projeto estejam definidas nas pipelines do Azure DevOps de acordo com suas necessidades.
 
-- Lembre-se de verificar se as pipelines tem permiss„o para acessar os grupos de vari·veis (Library).
+- Lembre-se de verificar se as pipelines tem permiss√£o para acessar os grupos de vari√°veis (Library).
 
 ### 6. Rodar as Pipelines
 
 - Execute as pipelines no Azure DevOps para compilar, testar e implantar.
 
-- ### Conclus„o
+- ### Conclus√£o
 
-- Ao final, se todas pipelines rodarem com sucesso, o aplicativo ser· implantado, assim como todo o resto do fluxo ter· sido executado (testes, sonarcloud etc...)
+- Ao final, se todas pipelines rodarem com sucesso, o aplicativo ser√° implantado, assim como todo o resto do fluxo ter√° sido executado (testes, sonarcloud etc...)
