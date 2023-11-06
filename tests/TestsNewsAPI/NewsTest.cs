@@ -98,22 +98,6 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
     public async Task TestGetAllNewsEndpoint()
     {
         // Arrange
-        var application = new WebApplicationFactory<Program>()
-        .WithWebHostBuilder(builder =>
-        {
-            builder.ConfigureServices(services =>
-            {
-                Microsoft.Extensions.Configuration.IConfiguration configuration = new ConfigurationBuilder()
-                .SetBasePath("src/Services/NewsAPI")
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-                var connection = configuration.GetConnectionString("AzureDB");
-                services.AddDbContext<AppIdentityDbContext>(options =>
-                options.UseSqlServer(connection));
-            });
-        });
-
         var client = _factory.CreateClient();
         string url = "http://localhost:5075/api/news";
 
