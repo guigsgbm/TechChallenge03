@@ -16,8 +16,8 @@ variables:
    value: '*/*/NewsAPI/Dockerfile'
 
 stages:
-- stage: Build_Image
-  displayName: Build and push stage
+- stage: Build_and_Release
+  displayName: Build and Release stage
   jobs:
   - job: Docker
     displayName: Docker buildAndPush
@@ -97,3 +97,4 @@ stages:
           DockerNamespace: 'acrtechchallenge03.azurecr.io'
           DockerRepository: 'newsapi'
           DockerImageTag: 'latest'
+    dependsOn: Docker
