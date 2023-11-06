@@ -11,10 +11,8 @@ using System.Net;
 
 namespace TestsNewsAPI;
 
-public class NewsTest : WebApplicationFactory<Program>
+public class NewsTest
 {
-    private readonly WebApplicationFactory<Program> _factory;
-    private readonly Microsoft.Extensions.Configuration.IConfiguration? _config;
     private DbContextOptions<AppIdentityDbContext> _options;
 
     public NewsTest(WebApplicationFactory<Program> factory)
@@ -22,9 +20,6 @@ public class NewsTest : WebApplicationFactory<Program>
         _options = new DbContextOptionsBuilder<AppIdentityDbContext>()
             .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
             .Options;
-
-        _factory = factory;
-        _config = factory.Services.GetService<Microsoft.Extensions.Configuration.IConfiguration>();
     }
 
     [Fact]
@@ -101,7 +96,25 @@ public class NewsTest : WebApplicationFactory<Program>
     public async Task TestGetAllNewsEndpoint()
     {
         // Arrange
-        var client = _factory.CreateClient();
+        var factory = new WebApplicationFactory<Program>()
+                .WithWebHostBuilder(builder =>
+                {
+                    builder.ConfigureServices(services =>
+                    {
+                        var serviceProvider = services.BuildServiceProvider();
+                        var configuration = serviceProvider.GetRequiredService<Microsoft.Extensions.Configuration.IConfiguration>();
+                        var connection = configuration.GetConnectionString("AzureDB");
+
+                        services.AddDbContext<AppIdentityDbContext>(options =>
+                            options.UseSqlServer(connection));
+
+                        services.AddIdentity<IdentityUser, IdentityRole>()
+                        .AddRoles<IdentityRole>()
+                        .AddEntityFrameworkStores<AppIdentityDbContext>();
+
+                    });
+                });
+        var client = factory.CreateClient();
         string url = "/api/news";
 
         // Act
