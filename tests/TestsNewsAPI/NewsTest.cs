@@ -101,12 +101,12 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
                 {
                     builder.ConfigureAppConfiguration((hostingContext, config) =>
                     {
-                        var solutionDir = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
-                        var projectPath = Path.Combine(solutionDir, "src", "Services", "NewsAPI");
+                        var appsettingsPath = Environment.GetEnvironmentVariable("APPSETTINGS_PATH");
 
                         config
-                            .SetBasePath(projectPath)
-                            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                        .SetBasePath(appsettingsPath)
+                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
 
                     });
 
