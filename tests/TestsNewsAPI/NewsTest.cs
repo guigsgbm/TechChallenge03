@@ -1,6 +1,7 @@
 using App.Domain;
 using App.Infrastructure;
 using Castle.Core.Configuration;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ namespace TestsNewsAPI;
 public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
 {
     private readonly WebApplicationFactory<Program> _factory;
+    private readonly IConfigurationRoot _config;
     private DbContextOptions<AppIdentityDbContext> _options;
 
     public NewsTest(WebApplicationFactory<Program> factory)
@@ -22,6 +24,7 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
             .Options;
 
         _factory = factory;
+        _config = (IConfigurationRoot?)factory.Services.GetService<Microsoft.Extensions.Configuration.IConfiguration>();
     }
 
     [Fact]
@@ -99,7 +102,7 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
     {
         // Arrange
         var client = _factory.CreateClient();
-        string url = "http://localhost:5075/api/news";
+        string url = "/api/news";
 
         // Act
         var response = await client.GetAsync(url);
