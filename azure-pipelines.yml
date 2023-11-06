@@ -91,10 +91,12 @@ stages:
       - task: AzureRmWebAppDeployment@4
         inputs:
           ConnectionType: 'AzureRM'
-          azureSubscription: 'TechChallenge-03'
+          azureSubscription: 'AZ TechChallenge - DEV'
           appType: 'webAppContainer'
           WebAppName: 'WebAppTechChallenge03'
           DockerNamespace: 'acrtechchallenge03.azurecr.io'
           DockerRepository: '$(imageName)'
           DockerImageTag: 'latest'
+        
+
     dependsOn: Docker
