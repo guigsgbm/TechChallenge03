@@ -101,7 +101,8 @@ public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
                 {
                     builder.ConfigureAppConfiguration((hostingContext, config) =>
                     {
-                        var projectPath = Path.Combine(Directory.GetCurrentDirectory(), "src", "Services", "NewsAPI");
+                        var solutionDir = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
+                        var projectPath = Path.Combine(solutionDir, "src", "Services", "NewsAPI");
 
                         config
                             .SetBasePath(projectPath)
