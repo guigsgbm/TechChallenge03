@@ -97,6 +97,5 @@ stages:
           DockerNamespace: 'acrtechchallenge03.azurecr.io'
           DockerRepository: '$(imageName)'
           DockerImageTag: 'latest'
-        
-
     dependsOn: Docker
+    
