@@ -11,7 +11,7 @@ using System.Net;
 
 namespace TestsNewsAPI;
 
-public class NewsTest
+public class NewsTest : IClassFixture<WebApplicationFactory<Program>>
 {
     private DbContextOptions<AppIdentityDbContext> _options;
 
